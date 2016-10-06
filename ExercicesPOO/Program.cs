@@ -28,51 +28,47 @@ namespace ExercicesPOO
          lionel.Enregistrer(fileName);
          jacques.Enregistrer(fileName);
 
+         deserializeEasy();
+      }
+
+      public static void deserializeEasy()
+      {
          StreamReader reader = new StreamReader("repertoire.txt");
          String line;
          List<Contact> repertoire = new List<Contact>();
          Console.WriteLine();
 
-         String champ;
-         String value = "";
-         String nom = "";
-         String prenom = "";
-         String telephone = "";
-         String mail = "";
-
          while ((line = reader.ReadLine()) != null)
          {
-            
-            int index;
             if (line != "")
             {
-               index = line.IndexOf('=');
-               champ = line.Substring(0, index);
-               value = line.Substring(index + 1);
+               Console.WriteLine(line);
+               int indice;
+               String nom;
+               String prenom;
+               String telephone;
+               String mail;
 
-               if (champ.Equals("nom"))
-               {
-                  nom = value;
-               }
-               if (champ.Equals("prenom"))
-               {
-                  prenom = value;
-               }
-               if (champ.Equals("telephone"))
-               {
-                  telephone = value;
-               }
-               if (champ.Equals("mail"))
-               {
-                  mail = value;
-               }
-            }
-            else
-            {
+               indice = line.IndexOf(';');
+               nom = line.Substring(0, indice);
+               line = line.Substring(indice + 1);
+
+               indice = line.IndexOf(';');
+               prenom = line.Substring(0, indice);
+               line = line.Substring(indice + 1);
+
+               indice = line.IndexOf(';');
+               telephone = line.Substring(0, indice);
+               line = line.Substring(indice + 1);
+
+               mail = line;
+
                repertoire.Add(new Contact(nom, prenom, telephone, mail));
             }
          }
-         foreach (Contact contact in repertoire){
+
+         foreach (Contact contact in repertoire)
+         {
             Console.WriteLine();
             contact.SePresenter();
          }

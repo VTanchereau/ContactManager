@@ -58,15 +58,11 @@ namespace ExercicesPOO
          StreamWriter sw = new StreamWriter(fichier, true);
          String enregistrement;
 
-         enregistrement = "nom=" + this.nom;
+         enregistrement = this.nom;
+         enregistrement += ";" + this.prenom;
+         enregistrement += ";" + this.telephone;
+         enregistrement += ";" + this.mail;
          sw.WriteLine(enregistrement);
-         enregistrement = "prenom=" + this.prenom;
-         sw.WriteLine(enregistrement);
-         enregistrement = "telephone=" + this.telephone;
-         sw.WriteLine(enregistrement);
-         enregistrement = "mail=" + this.mail;
-         sw.WriteLine(enregistrement);
-         sw.WriteLine();
          sw.Close();
       }
 
