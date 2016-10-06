@@ -19,5 +19,14 @@ namespace ExercicesPOO
          get { return this.matiere; }
          set { this.matiere = value; }
       }
+
+      public void SePresenter()
+      {
+         base.SePresenter();
+         String presentation;
+         presentation = "J'enseigne la matière " + this.matiere;
+
+         Console.WriteLine(presentation);
+      }
    }
 }

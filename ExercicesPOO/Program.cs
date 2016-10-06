@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExercicesPOO
 {
@@ -11,24 +8,13 @@ namespace ExercicesPOO
    {
       static void Main(string[] args)
       {
-         Contact jacques = new Contact("Chirac", "Jacques", "06********", "jacquouille_du_44@hotmail.com");
-         Contact lionel = new Contact("Jospin", "Lionel", "07********", "lion_king@laposte.net");
-         jacques.SePresenter();
-         Console.WriteLine();
-         lionel.SePresenter();
+         Menu menu = new Menu();
 
-         lionel.Telephone = "0708091011";
-         Console.WriteLine();
-         lionel.SePresenter();
-
-         String fileName = "repertoire.txt";
-         StreamWriter sw = File.CreateText(fileName);
-         sw.Close();
-
-         lionel.Enregistrer(fileName);
-         jacques.Enregistrer(fileName);
-
-         deserializeEasy();
+         while (menu.Continuer)
+         {
+            menu.Afficher();
+            menu.ExecuterCHoix(menu.RecupererChoix());
+         }
       }
 
       public static void deserializeEasy()
@@ -42,7 +28,6 @@ namespace ExercicesPOO
          {
             if (line != "")
             {
-               Console.WriteLine(line);
                int indice;
                String nom;
                String prenom;

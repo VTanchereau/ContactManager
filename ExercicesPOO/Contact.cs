@@ -9,13 +9,25 @@ namespace ExercicesPOO
 {
    class Contact
    {
-      private String nom;
-      private String prenom;
-      private String telephone;
-      private String mail;
-      private DateTime dateDeNaissance;
+      protected String nom;
+      protected String prenom;
+      protected String telephone;
+      protected String mail;
+      protected DateTime dateDeNaissance;
 
+      public Contact()
+      {
+         this.prenom = demanderUtilisateur("prenom");
+         this.nom = demanderUtilisateur("nom");
+         this.telephone = demanderUtilisateur("telephone");
+         this.mail = demanderUtilisateur("mail");
+      }
 
+      public Contact(String nom, String prenom)
+      {
+         this.nom = nom;
+         this.prenom = prenom;
+      }
 
       public Contact(String nom, String prenom, String telephone, String mail)
       {
@@ -27,8 +39,18 @@ namespace ExercicesPOO
 
       public String demanderUtilisateur(String demande)
       {
-         Console.WriteLine("Entrez votre " + demande + " :");
+         Console.WriteLine("Entrez le " + demande + " :");
          return Console.ReadLine();
+      }
+
+      public void Afficher()
+      {
+         String ligne;
+         ligne = this.prenom;
+         ligne += " " + this.nom;
+         ligne += " ; Téléphone : " + this.telephone;
+         ligne += " ; Mail : " + this.mail;
+         Console.WriteLine(ligne);
       }
 
       public String Nom
@@ -76,6 +98,28 @@ namespace ExercicesPOO
          presentation += "\nou par mail à l'adresse " + this.mail;
 
          Console.WriteLine(presentation);
+      }
+
+      public void SePresenter(bool versionCourte)
+      {
+         if (versionCourte)
+         {
+            String ligne;
+            Console.WriteLine("---------------------------------------------------------------------");
+            ligne = this.prenom;
+            ligne += " " + this.nom;
+            Console.WriteLine(ligne);
+            ligne = "\tTéléphone : " + this.telephone;
+            Console.WriteLine(ligne);
+            ligne = "\tMail : " + this.mail;
+            Console.WriteLine(ligne);
+            Console.WriteLine("---------------------------------------------------------------------");
+         }
+         else
+         {
+            SePresenter();
+         }
+         
       }
    }
 }
