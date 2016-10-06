@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ExercicesPOO
@@ -100,26 +101,43 @@ namespace ExercicesPOO
          Console.WriteLine(presentation);
       }
 
-      public void SePresenter(bool versionCourte)
+      public bool RechercherParChamp(String nomChamp, String motCle)
       {
-         if (versionCourte)
+         String pattern;
+         Regex rgx;
+         bool match;
+
+         pattern = @"" + motCle.ToUpper();
+         rgx = new Regex(pattern);
+         match = false;
+         nomChamp = nomChamp.ToUpper();
+
+         if (nomChamp == "PRENOM")
          {
-            String ligne;
-            Console.WriteLine("---------------------------------------------------------------------");
-            ligne = this.prenom;
-            ligne += " " + this.nom;
-            Console.WriteLine(ligne);
-            ligne = "\tTéléphone : " + this.telephone;
-            Console.WriteLine(ligne);
-            ligne = "\tMail : " + this.mail;
-            Console.WriteLine(ligne);
-            Console.WriteLine("---------------------------------------------------------------------");
+            match = (rgx.IsMatch(this.prenom.ToUpper()));
          }
-         else
+         if (nomChamp == "NOM")
          {
-            SePresenter();
+            match = (rgx.IsMatch(this.nom.ToUpper()));
          }
-         
+         if (nomChamp == "MAIL")
+         {
+            match = (rgx.IsMatch(this.mail.ToUpper()));
+         }
+         if (nomChamp == "TELEPHONE")
+         {
+            match = (rgx.IsMatch(this.telephone.ToUpper()));
+         }
+         return match;
+      }
+
+      public override String ToString()
+      {
+         String ligne;
+         ligne = this.prenom + " " + this.nom;
+         ligne += "\n\tTéléphone : " + this.telephone;
+         ligne += "\n\tMail : " + this.mail;
+         return ligne;
       }
    }
 }

@@ -13,7 +13,7 @@ namespace ExercicesPOO
          while (menu.Continuer)
          {
             menu.Afficher();
-            menu.ExecuterCHoix(menu.RecupererChoix());
+            menu.ExecuterChoix(menu.RecupererChoix());
          }
       }
 

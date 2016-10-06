@@ -32,7 +32,7 @@ namespace ExercicesPOO
          get { return this.continuer; }
       }
 
-      public void ExecuterCHoix(int choix)
+      public void ExecuterChoix(int choix)
       {
          switch (choix)
          {
@@ -77,9 +77,11 @@ namespace ExercicesPOO
          {
             Console.WriteLine("Aucun contact dans le repertoire");
          }
+         Console.WriteLine("---------------------------------------------------------------------");
          foreach (Contact contact in this.repertoire)
          {
             contact.SePresenter(true);
+            Console.WriteLine("---------------------------------------------------------------------");
          }
       }
 
@@ -158,11 +160,20 @@ namespace ExercicesPOO
 
       public void AfficherResultatsRecherche(List<Contact> lst)
       {
+         if (lst.Count == 0)
+         {
+            Console.WriteLine("Aucun résultat.");
+            return;
+         }
+         Console.WriteLine("__________________________________________________________________________");
+         Console.WriteLine("Résultats de la recherche");
+         Console.WriteLine("---------------------------------------------------------------------");
          foreach (Contact contact in lst)
          {
-            Console.WriteLine("__________________________________________________________________________");
             contact.SePresenter(true);
+            Console.WriteLine("---------------------------------------------------------------------");
          }
+         
       }
 
       public void Search(String motCle)
@@ -175,16 +186,16 @@ namespace ExercicesPOO
          Regex rgx;
          List<Contact> searchResult;
 
-         pattern= @"[" + motCle + "]";
+         pattern= @"" + motCle.ToUpper();
          rgx = new Regex(pattern);
          searchResult = new List<Contact>();
 
          foreach (Contact contact in this.repertoire)
          {
-            matchNom = (rgx.IsMatch(contact.Nom));
-            matchPrenom = (rgx.IsMatch(contact.Prenom));
-            matchTelephone = (rgx.IsMatch(contact.Telephone));
-            matchMail = (rgx.IsMatch(contact.Mail));
+            matchNom = (rgx.IsMatch(contact.Nom.ToUpper()));
+            matchPrenom = (rgx.IsMatch(contact.Prenom.ToUpper()));
+            matchTelephone = (rgx.IsMatch(contact.Telephone.ToUpper()));
+            matchMail = (rgx.IsMatch(contact.Mail.ToUpper()));
 
             if (matchNom || matchPrenom || matchTelephone || matchMail)
             {
@@ -208,7 +219,7 @@ namespace ExercicesPOO
          Regex rgx;
          List<Contact> searchResult;
 
-         pattern = @"[" + motCle.ToUpper() + "]";
+         pattern = @"" + motCle.ToUpper();
          rgx = new Regex(pattern);
          searchResult = new List<Contact>();
          champ = champ.ToUpper();
@@ -277,11 +288,12 @@ namespace ExercicesPOO
          StreamReader reader = new StreamReader(this.fichier);
          String line;
          List<Contact> provisoire = new List<Contact>();
+         String[] champs;
          while ((line = reader.ReadLine()) != null)
          {
             if (line != "")
             {
-               String[] champs;
+               
                champs = line.Split(';');
                if (champs.Length == 2)
                {
