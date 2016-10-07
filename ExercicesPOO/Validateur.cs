@@ -8,11 +8,11 @@ namespace ExercicesPOO
 {
    abstract class Validateur
    {
-      public abstract bool Valider(String str);
+      public abstract bool Validate(String str);
 
       public abstract void ErrorMessage(Afficheur afficheur);
 
-      public bool isEmpty(String str)
+      public bool IsEmpty(String str)
       {
          return (str == "");
       }

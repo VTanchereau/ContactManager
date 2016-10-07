@@ -9,16 +9,18 @@ namespace ExercicesPOO
 {
    class ValidateurPath : Validateur
    {
-      public override bool Valider(String str)
+      public override bool Validate(String str)
       {
          System.IO.FileInfo fi = null;
          try
          {
             fi = new System.IO.FileInfo(str);
          }
-         catch (ArgumentException) { }
-         catch (System.IO.PathTooLongException) { }
-         catch (NotSupportedException) { }
+         catch (Exception) {
+            Console.WriteLine("Désolé, j'ai planté");
+         }
+         //catch (System.IO.PathTooLongException) { }
+         //catch (NotSupportedException) { }
          if (ReferenceEquals(fi, null))
          {
             return false;

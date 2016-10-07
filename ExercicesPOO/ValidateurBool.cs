@@ -9,7 +9,7 @@ namespace ExercicesPOO
 {
    class ValidateurBool : Validateur
    {
-      public override bool Valider(String str)
+      public override bool Validate(String str)
       {
          bool oui;
          bool non;

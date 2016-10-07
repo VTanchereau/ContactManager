@@ -10,7 +10,7 @@ namespace ExercicesPOO
    class ValidateurMail : Validateur
    {
 
-      public override bool Valider(String str)
+      public override bool Validate(String str)
       {
          String patternNet;
          String patternCom;

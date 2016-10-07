@@ -8,7 +8,7 @@ namespace ExercicesPOO
 {
    class ValidateurChamp : Validateur
    {
-      public override bool Valider(String str)
+      public override bool Validate(String str)
       {
          return Contact.isChamp(str);
       }

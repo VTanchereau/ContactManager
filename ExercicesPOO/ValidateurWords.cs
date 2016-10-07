@@ -10,7 +10,7 @@ namespace ExercicesPOO
    class ValidateurWords : Validateur
    {
 
-      public override bool Valider(String str)
+      public override bool Validate(String str)
       {
          String pattern;
          pattern = @"[A-Z]?[a-z]+";

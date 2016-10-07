@@ -89,7 +89,7 @@ namespace ExercicesPOO
       private void AfficherContact(Contact contact)
       {
          String sortie;
-         sortie = contact.ToString();
+         sortie = contact.Affichage();
          AfficherLigne(sortie);
       }
 

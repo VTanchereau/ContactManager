@@ -68,9 +68,71 @@ namespace ExercicesPOO
             case 6:
                this.Exporter();
                break;
+            case 7:
+               this.RetirerContact();
+               break;
             default:
                this.afficheur.AfficherErreur("Le chiffre entré ne correspond à aucune action du menu.");
                break;
+         }
+      }
+
+      private void RetirerContact()
+      {
+         List<Contact> resultats;
+         int choix;
+         bool boucle;
+
+         while (true)
+         {
+            resultats = this.Rechercher();
+            boucle = true;
+
+            while (boucle)
+            {
+               this.afficheur.AfficherDemande("1 - Supprimer les contacts selectionnés.");
+               this.afficheur.AfficherDemande("2 - Effectuer une nouvelle recherche.");
+               this.afficheur.AfficherDemande("");
+               this.afficheur.AfficherDemande("0 - Abbandonner la suppression de contacts.");
+
+               choix = int.Parse(userInput.getInput("", new ValidateurInt()));
+               if (choix == 1)
+               {
+                  if(resultats.Count > 0)
+                  {
+                     foreach (Contact contact in resultats)
+                     {
+                        this.repertoire.Contenu.Remove(contact);
+                     }
+                     if (resultats.Count > 1)
+                     {
+                        this.afficheur.AfficherDemande("Les contacts ont bien été supprimés.");
+                     }
+                     else
+                     {
+                        this.afficheur.AfficherDemande("Le contact a bien été supprimé. (pensez à sauvegarder le répertoire pour enregistrer la suppression)");
+                     }
+                     return;
+                  }
+                  else
+                  {
+                     this.afficheur.AfficherErreur("Aucuns contacts ne sont sélectionnés.");
+                     boucle = false;
+                  }
+               }
+               else if (choix == 2)
+               {
+                  boucle = false;
+               }
+               else if (choix == 0)
+               {
+                  return;
+               }
+               else
+               {
+                  this.afficheur.AfficherErreur("Le chiffre entré ne correspond à aucune action du menu.");
+               }
+            }
          }
       }
 
@@ -103,7 +165,7 @@ namespace ExercicesPOO
          this.afficheur.AfficherRepertoire(this.repertoire);
       }
 
-      private void Rechercher()
+      private List<Contact> Rechercher()
       {
          String motCle;
          bool precise;
@@ -124,6 +186,7 @@ namespace ExercicesPOO
          }
 
          this.afficheur.AfficherResultatsRecherche(result);
+         return result;
       }
 
       private void AjouterContact()
@@ -156,6 +219,7 @@ namespace ExercicesPOO
          this.actions.Add("4 - Charger un fichier.");
          this.actions.Add("5 - Sauvegarder le répertoire.");
          this.actions.Add("6 - Exporter le répertoire.");
+         this.actions.Add("7 - Supprimer un ou des contacts.");
          // Ajouter les nouvelles actions ici
          this.actions.Add("");
          this.actions.Add("0 - Quittez le repertoire.");

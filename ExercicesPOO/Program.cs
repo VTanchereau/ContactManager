@@ -9,8 +9,8 @@ namespace ExercicesPOO
 
       static void Main(string[] args)
       {
-         Menu menu;
-         menu = new Menu();
+            Menu menu;
+            menu = new Menu();
       }
 
       public static void DEBUG(String str)

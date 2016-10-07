@@ -9,7 +9,7 @@ namespace ExercicesPOO
 {
    class ValidateurInt : Validateur
    {
-      public override bool Valider(String str)
+      public override bool Validate(String str)
       {
          String pattern;
          pattern = @"[0-9]+";

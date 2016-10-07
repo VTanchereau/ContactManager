@@ -16,7 +16,7 @@ namespace ExercicesPOO
          this.afficheur = afficheur;
       }
 
-      public String getInput(String message, Validateur valider)
+      public String getInput(String message, Validateur validateur)
       {
          String input;
          if (message != "")
@@ -27,19 +27,19 @@ namespace ExercicesPOO
          while (true)
          {
             input = Console.ReadLine();
-            if (valider.isEmpty(input))
+            if (validateur.IsEmpty(input))
             {
-               valider.EmptyErrorMessage(this.afficheur);
+               validateur.EmptyErrorMessage(this.afficheur);
             }
             else
             {
-               if (valider.Valider(input))
+               if (validateur.Validate(input))
                {
                   return input;
                }
                else
                {
-                  valider.ErrorMessage(this.afficheur);
+                  validateur.ErrorMessage(this.afficheur);
                }
             }
             

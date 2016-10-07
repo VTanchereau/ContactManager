@@ -37,7 +37,7 @@ namespace ExercicesPOO
 
          foreach(Contact contact in repertoire.Contenu)
          {
-            writer.WriteLine(contact.ToString());
+            writer.WriteLine(contact.Extract());
          }
 
          writer.Close();

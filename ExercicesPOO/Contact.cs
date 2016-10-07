@@ -108,14 +108,14 @@ namespace ExercicesPOO
                match = (rgx.IsMatch(this.telephone.ToUpper()));
             }
          }
-         
+
          return match;
       }
-      public override String ToString()
+      public String Extract()
       {
          String ligne;
          ligne = this.prenom;
-         ligne +=";" + this.nom;
+         ligne += ";" + this.nom;
          if (moreInfos)
          {
             ligne += ";" + this.telephone;
@@ -124,21 +124,13 @@ namespace ExercicesPOO
          return ligne;
       }
 
-      public String ToString(bool affichage)
+      public String Affichage()
       {
-         if (affichage)
-         {
-            String ligne;
-            ligne = this.prenom + " " + this.nom;
-            ligne += "\n\tTéléphone : " + this.telephone;
-            ligne += "\n\tMail : " + this.mail;
-            return ligne;
-         }
-         else
-         {
-            return this.ToString();
-         }
-         
+         String ligne;
+         ligne = this.prenom + " " + this.nom;
+         ligne += "\n\tTéléphone : " + this.telephone;
+         ligne += "\n\tMail : " + this.mail;
+         return ligne;
       }
    }
 }
