@@ -7,11 +7,6 @@ namespace ExercicesPOO
    {
       private List<Contact> contenu;
 
-      public Repertoire()
-      {
-         this.contenu = new List<Contact>();
-      }
-
       public Repertoire(List<Contact> entrees)
       {
          this.contenu = entrees;
@@ -36,6 +31,7 @@ namespace ExercicesPOO
 
          foreach (Contact contact in this.contenu)
          {
+            Program.DEBUG(motCle);
             match = contact.RechercherParChamp("nom", motCle);
             match = match || contact.RechercherParChamp("prenom", motCle);
             match = match || contact.RechercherParChamp("mail", motCle);

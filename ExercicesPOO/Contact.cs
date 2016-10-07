@@ -14,44 +14,22 @@ namespace ExercicesPOO
       protected String prenom;
       protected String telephone;
       protected String mail;
-      protected DateTime dateDeNaissance;
-
-      public Contact()
-      {
-         this.prenom = demanderUtilisateur("prenom");
-         this.nom = demanderUtilisateur("nom");
-         this.telephone = demanderUtilisateur("telephone");
-         this.mail = demanderUtilisateur("mail");
-      }
+      protected bool moreInfos;
 
       public Contact(String nom, String prenom)
       {
          this.nom = nom;
          this.prenom = prenom;
+         this.moreInfos = false;
       }
 
       public Contact(String nom, String prenom, String telephone, String mail)
       {
+         this.moreInfos = true;
          this.nom = nom;
          this.prenom = prenom;
          this.telephone = telephone;
          this.mail = mail;
-      }
-
-      public String demanderUtilisateur(String demande)
-      {
-         Console.WriteLine("Entrez le " + demande + " :");
-         return Console.ReadLine();
-      }
-
-      public void Afficher()
-      {
-         String ligne;
-         ligne = this.prenom;
-         ligne += " " + this.nom;
-         ligne += " ; Téléphone : " + this.telephone;
-         ligne += " ; Mail : " + this.mail;
-         Console.WriteLine(ligne);
       }
 
       public String Nom
@@ -89,16 +67,15 @@ namespace ExercicesPOO
          sw.Close();
       }
 
-
-      public void SePresenter()
+      public static bool isChamp(String str)
       {
-         String presentation;
-         presentation = "Mon nom est " + this.prenom + " " + this.nom + ".";
-         presentation += "\nVous pouvez me joindre au " + this.telephone;
-         presentation += "\nT'as trop cru j'allais de filer mon num mdr";
-         presentation += "\nou par mail à l'adresse " + this.mail;
+         str = str.ToUpper();
+         bool prenomBool = str.Equals("PRENOM");
+         bool nomBool = str.Equals("NOM");
+         bool mailBool = str.Equals("MAIL");
+         bool telBool = str.Equals("TELEPHONE");
 
-         Console.WriteLine(presentation);
+         return prenomBool || nomBool || mailBool || telBool;
       }
 
       public bool RechercherParChamp(String nomChamp, String motCle)
@@ -120,24 +97,48 @@ namespace ExercicesPOO
          {
             match = (rgx.IsMatch(this.nom.ToUpper()));
          }
-         if (nomChamp == "MAIL")
+         if (this.moreInfos)
          {
-            match = (rgx.IsMatch(this.mail.ToUpper()));
+            if (nomChamp == "MAIL")
+            {
+               match = (rgx.IsMatch(this.mail.ToUpper()));
+            }
+            if (nomChamp == "TELEPHONE")
+            {
+               match = (rgx.IsMatch(this.telephone.ToUpper()));
+            }
          }
-         if (nomChamp == "TELEPHONE")
-         {
-            match = (rgx.IsMatch(this.telephone.ToUpper()));
-         }
+         
          return match;
       }
-
       public override String ToString()
       {
          String ligne;
-         ligne = this.prenom + " " + this.nom;
-         ligne += "\n\tTéléphone : " + this.telephone;
-         ligne += "\n\tMail : " + this.mail;
+         ligne = this.prenom;
+         ligne +=";" + this.nom;
+         if (moreInfos)
+         {
+            ligne += ";" + this.telephone;
+            ligne += ";" + this.mail;
+         }
          return ligne;
+      }
+
+      public String ToString(bool affichage)
+      {
+         if (affichage)
+         {
+            String ligne;
+            ligne = this.prenom + " " + this.nom;
+            ligne += "\n\tTéléphone : " + this.telephone;
+            ligne += "\n\tMail : " + this.mail;
+            return ligne;
+         }
+         else
+         {
+            return this.ToString();
+         }
+         
       }
    }
 }

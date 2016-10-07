@@ -7,306 +7,158 @@ namespace ExercicesPOO
 {
    class Menu
    {
-      private List<Contact> repertoire;
+      private List<String> actions;
       private bool continuer;
-      private String fichier;
+      private UserInput userInput;
+      private Afficheur afficheur;
+      private Repertoire repertoire;
+      private FileManager fileManager;
 
       public Menu()
       {
-         List<Contact> provi;
-         fichier = "repertoire.txt";
-         provi = this.ReadFile();
-         if (provi.Count == 0)
-         {
-            repertoire = new List<Contact>();
-         }
-         else
-         {
-            repertoire = provi;
-         }
-         continuer = true;
+         this.actions = new List<String>();
+         this.afficheur = new Afficheur(this);
+         this.userInput = new UserInput(afficheur);
+         this.fileManager = new FileManager();
+         this.repertoire = new Repertoire(this.fileManager.LoadFile());
+         this.AjouterActions();
+         this.continuer = true;
+
+         this.Launch();
       }
 
-      public bool Continuer
+      public List<String> Actions
       {
-         get { return this.continuer; }
+         get { return this.actions; }
       }
 
-      public void ExecuterChoix(int choix)
+      private void Launch()
+      {
+         while (this.continuer)
+         {
+            this.afficheur.AfficherMenu();
+            int choix;
+            choix = int.Parse(userInput.getInput("", new ValidateurInt()));
+            this.TraiterChoix(choix);
+         }
+      }
+
+      private void TraiterChoix(int choix)
       {
          switch (choix)
          {
+            case 0:
+               this.continuer = false;
+               break;
             case 1:
-               this.AfficherContacts();
+               this.ListerContacts();
                break;
             case 2:
                this.AjouterContact();
                break;
             case 3:
-               this.SaveContact();
-               break;
-            case 4:
                this.Rechercher();
                break;
-            case 0:
-               this.continuer = false;
+            case 4:
+               this.Charger();
+               break;
+            case 5:
+               this.Sauvegarder();
+               break;
+            case 6:
+               this.Exporter();
                break;
             default:
-               Console.WriteLine("Option non valide");
+               this.afficheur.AfficherErreur("Le chiffre entré ne correspond à aucune action du menu.");
                break;
          }
       }
 
-      public void Afficher()
+      private void Exporter()
       {
-         Console.WriteLine("__________________________________________________________________________");
-         Console.WriteLine("Menu :");
-         Console.WriteLine("1 - Afficher la liste des Contacts.");
-         Console.WriteLine("2 - Ajouter un Contact.");
-         Console.WriteLine("3 - Sauvegarder les contacts");
-         Console.WriteLine("4 - Rechercher des contacts");
-         Console.WriteLine();
-         Console.WriteLine("0 - Quitter le repertoire.");
-         Console.WriteLine("__________________________________________________________________________");
+         String path;
+
+         path = this.userInput.getInput("Chemin du fichier.", new ValidateurPath());
+         this.fileManager.Exporter(this.repertoire, path);
+         this.afficheur.AfficherDemande("Le fichier a bien été exporté.");
       }
 
-      public void AfficherContacts()
+      private void Sauvegarder()
       {
-         Console.WriteLine("__________________________________________________________________________");
-         if (repertoire.Count == 0)
-         {
-            Console.WriteLine("Aucun contact dans le repertoire");
-         }
-         Console.WriteLine("---------------------------------------------------------------------");
-         foreach (Contact contact in this.repertoire)
-         {
-            contact.SePresenter(true);
-            Console.WriteLine("---------------------------------------------------------------------");
-         }
+         this.fileManager.Save(this.repertoire);
+         this.afficheur.AfficherDemande("Le fichier a bien été sauvegardé.");
       }
 
-      public void AjouterContact()
+      private void Charger()
       {
-         repertoire.Add(new Contact());
+         String path;
+
+         path = this.userInput.getInput("Chemin du fichier.", new ValidateurPath());
+         this.fileManager.LoadFile(path);
+         this.afficheur.AfficherDemande("Le fichier a bien été chargé.");
       }
 
-      public int RecupererChoix()
+      private void ListerContacts()
       {
-         while (true)
-         {
-            String choix = Console.ReadLine();
-            if (choix.Length == 1)
-            {
-               char caractere = char.Parse(choix);
-               if ((caractere > '0') || (caractere < '9'))
-               {
-                  return int.Parse(choix);
-               }
-               else
-               {
-                  Console.WriteLine("Option non valide, veuillez recommencer.");
-               }
-            }
-            else
-            {
-               Console.WriteLine("Option non valide, veuillez recommencer.");
-            }
-         }
+         this.afficheur.AfficherRepertoire(this.repertoire);
       }
 
-      public void ChoisirRecherche()
-      {
-         int choix;
-         choix = this.RecupererChoix();
-
-         switch (choix)
-         {
-            case 1:
-               this.RecherchePrecise();
-               break;
-            case 2:
-               this.RechercheLarge();
-               break;
-            case 0:
-               return;
-            default:
-               Console.WriteLine("Option non valide");
-               break;
-         }
-      }
-
-      public void RechercheLarge()
+      private void Rechercher()
       {
          String motCle;
-         Console.WriteLine("__________________________________________________________________________");
-         Console.WriteLine("Mot clé de la recherche :");
-         motCle = Console.ReadLine();
-         Console.WriteLine("__________________________________________________________________________");
-         this.Search(motCle);
+         bool precise;
+         List<Contact> result;
+
+         this.afficheur.AfficherRechercherContact();
+         precise = this.userInput.getInput("", new ValidateurBool()).ToUpper() == "OUI";
+         motCle = this.userInput.getInput("Entrez un mot clé :",new  ValidateurWords());
+         if (precise)
+         {
+            this.afficheur.AfficherDemande("Entrez un champ :");
+            String champ = this.userInput.getInput("Entrez un champ :", new ValidateurChamp());
+            result = this.repertoire.Rechercher(motCle, champ);
+         }
+         else
+         {
+            result = this.repertoire.Rechercher(motCle);
+         }
+
+         this.afficheur.AfficherResultatsRecherche(result);
       }
 
-      public void RecherchePrecise()
+      private void AjouterContact()
       {
-         String motCle;
-         String critere;
-         Console.WriteLine("__________________________________________________________________________");
-         Console.WriteLine("Mot clé de la recherche :");
-         motCle = Console.ReadLine();
-         Console.WriteLine("Critere de la recherche :");
-         critere = Console.ReadLine();
-         Console.WriteLine("__________________________________________________________________________");
-         this.Search(motCle, critere);
-      }
+         String prenom;
+         String nom;
+         bool moreInfos;
 
-      public void AfficherResultatsRecherche(List<Contact> lst)
-      {
-         if (lst.Count == 0)
+         this.afficheur.AfficherAjoutContact();
+         prenom = this.userInput.getInput("Entrez le prénom :", new ValidateurWords());
+         nom = this.userInput.getInput("Entrez le nom :", new ValidateurWords());
+         moreInfos = this.userInput.getInput("Voulez vous renseigner le numéro de téléphone et le mail ?", new ValidateurBool()).ToUpper() == "OUI";
+         if (moreInfos)
          {
-            Console.WriteLine("Aucun résultat.");
-            return;
+            String telephone = this.userInput.getInput("Entrez le téléphone :", new ValidateurPhoneNumber());
+            String mail = this.userInput.getInput("Entrez le mail :", new ValidateurMail());
+            this.repertoire.Add(new Contact(nom, prenom, telephone, mail));
          }
-         Console.WriteLine("__________________________________________________________________________");
-         Console.WriteLine("Résultats de la recherche");
-         Console.WriteLine("---------------------------------------------------------------------");
-         foreach (Contact contact in lst)
+         else
          {
-            contact.SePresenter(true);
-            Console.WriteLine("---------------------------------------------------------------------");
-         }
-         
-      }
-
-      public void Search(String motCle)
-      {
-         bool matchNom;
-         bool matchPrenom;
-         bool matchTelephone;
-         bool matchMail;
-         String pattern;
-         Regex rgx;
-         List<Contact> searchResult;
-
-         pattern= @"" + motCle.ToUpper();
-         rgx = new Regex(pattern);
-         searchResult = new List<Contact>();
-
-         foreach (Contact contact in this.repertoire)
-         {
-            matchNom = (rgx.IsMatch(contact.Nom.ToUpper()));
-            matchPrenom = (rgx.IsMatch(contact.Prenom.ToUpper()));
-            matchTelephone = (rgx.IsMatch(contact.Telephone.ToUpper()));
-            matchMail = (rgx.IsMatch(contact.Mail.ToUpper()));
-
-            if (matchNom || matchPrenom || matchTelephone || matchMail)
-            {
-               searchResult.Add(contact);
-            }
-         }
-         if (searchResult.Count > 0)
-         {
-            this.AfficherResultatsRecherche(searchResult);
+            this.repertoire.Add(new Contact(nom, prenom));
          }
       }
 
-      public void Search(String motCle, String champ)
+      private void AjouterActions()
       {
-         bool matchNom;
-         bool matchPrenom;
-         bool matchTelephone;
-         bool matchMail;
-         bool match;
-         String pattern;
-         Regex rgx;
-         List<Contact> searchResult;
-
-         pattern = @"" + motCle.ToUpper();
-         rgx = new Regex(pattern);
-         searchResult = new List<Contact>();
-         champ = champ.ToUpper();
-
-         foreach (Contact contact in this.repertoire)
-         {
-            matchNom = (rgx.IsMatch(contact.Nom.ToUpper()));
-            matchPrenom = (rgx.IsMatch(contact.Prenom.ToUpper()));
-            matchTelephone = (rgx.IsMatch(contact.Telephone.ToUpper()));
-            matchMail = (rgx.IsMatch(contact.Mail.ToUpper()));
-            match = false;
-
-            if (champ == "PRENOM")
-            {
-               match = matchPrenom;
-            }
-            if (champ == "NOM")
-            {
-               match = matchNom;
-            }
-            if (champ == "MAIL")
-            {
-               match = matchMail;
-            }
-            if (champ == "TELEPHONE")
-            {
-               match = matchTelephone;
-            }
-            if (match)
-            {
-               searchResult.Add(contact);
-            }
-         }
-         if (searchResult.Count > 0)
-         {
-            this.AfficherResultatsRecherche(searchResult);
-         }
-      }
-
-      public void Rechercher()
-      {
-         Console.WriteLine("__________________________________________________________________________");
-         Console.WriteLine("1 - Recherche sur un champ précis.");
-         Console.WriteLine("2 - Rechercher sur tous les champs");
-         Console.WriteLine();
-         Console.WriteLine("0 - Quitter le repertoire.");
-         Console.WriteLine("__________________________________________________________________________");
-
-         this.ChoisirRecherche();
-      }
-
-      public void SaveContact()
-      {
-         List<Contact> fileContent = this.ReadFile();
-         foreach(Contact contact in repertoire)
-         {
-            if (!fileContent.Contains(contact))
-            {
-               contact.Enregistrer(this.fichier);
-            }
-         }
-      }
-
-      public List<Contact> ReadFile()
-      {
-         StreamReader reader = new StreamReader(this.fichier);
-         String line;
-         List<Contact> provisoire = new List<Contact>();
-         String[] champs;
-         while ((line = reader.ReadLine()) != null)
-         {
-            if (line != "")
-            {
-               
-               champs = line.Split(';');
-               if (champs.Length == 2)
-               {
-                  provisoire.Add(new Contact(champs[0], champs[1]));
-               }
-               if (champs.Length == 4)
-               {
-                  provisoire.Add(new Contact(champs[0], champs[1], champs[2], champs[3]));
-               }
-            }
-         }
-         reader.Close();
-         return provisoire;
+         this.actions.Add("1 - Afficher la liste des contacts.");
+         this.actions.Add("2 - Ajouter un contact.");
+         this.actions.Add("3 - Rechercher des contacts.");
+         this.actions.Add("4 - Charger un fichier.");
+         this.actions.Add("5 - Sauvegarder le répertoire.");
+         this.actions.Add("6 - Exporter le répertoire.");
+         // Ajouter les nouvelles actions ici
+         this.actions.Add("");
+         this.actions.Add("0 - Quittez le repertoire.");
       }
    }
 }
