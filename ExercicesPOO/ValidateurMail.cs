@@ -5,29 +5,41 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ExercicesPOO
+namespace ContactManager
 {
    class ValidateurMail : Validateur
    {
 
       public override bool Validate(String str)
       {
-         String patternNet;
-         String patternCom;
-         String patternFr;
+         String[] splitage;
+         splitage = str.Split('@');
 
-         patternCom = @"[a-z]+[._-]?[a-z]*@[a-z]+.com";
-         patternNet = @"[a-z]+[._-]?[a-z]*@[a-z]+.net";
-         patternFr = @"[a-z]+[._-]?[a-z]*@[a-z]+.fr";
+         if (splitage.Length != 2)
+         {
+            return false;
+         }
 
-         Regex rgxCom = new Regex(patternCom);
-         Regex rgxFr = new Regex(patternFr);
-         Regex rgxNet = new Regex(patternNet);
-         bool matchCom = rgxCom.IsMatch(str);
-         bool matchFr = rgxFr.IsMatch(str);
-         bool matchNet = rgxNet.IsMatch(str);
+         if ((splitage[0].Length == 0) || (splitage[1].Length == 0))
+         {
+            return false;
+         }
 
-         return matchCom || matchFr || matchNet;
+         Program.DEBUG(splitage[0]);
+         Program.DEBUG(splitage[1]);
+
+         splitage = splitage[1].Split('.');
+         Program.DEBUG(splitage[0]);
+         Program.DEBUG(splitage[1]);
+         if (splitage.Length != 2)
+         {
+            if ((splitage[0].Length == 0) || (splitage[1].Length == 0))
+            {
+               return false;
+            }
+         }
+
+         return true;
       }
 
       public override void ErrorMessage(Afficheur afficheur)
