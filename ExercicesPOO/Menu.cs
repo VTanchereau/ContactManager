@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace ContactManager
+namespace ExercicesPOO
 {
    class Menu
    {
@@ -18,7 +18,7 @@ namespace ContactManager
       {
          this.actions = new List<String>();
          this.afficheur = new Afficheur(this);
-         this.userInput = new UserInput(afficheur);
+         this.userInput = new UserInput(afficheur, this);
          this.fileManager = new FileManager();
          this.repertoire = new Repertoire(this.fileManager.LoadFile());
          this.AjouterActions();
@@ -34,8 +34,7 @@ namespace ContactManager
 
       private void Launch()
       {
-         while (this.continuer)
-         {
+         while(this.continuer){
             this.afficheur.AfficherMenu();
             int choix;
             choix = int.Parse(userInput.getInput("", new ValidateurInt()));
@@ -208,6 +207,17 @@ namespace ContactManager
          else
          {
             this.repertoire.Add(new Contact(nom, prenom));
+         }
+      }
+
+      public static bool IsAction(int act)
+      {
+         if ( (act >= 0) || (act < 8)){
+            return true;
+         }
+         else
+         {
+            return false;
          }
       }
 

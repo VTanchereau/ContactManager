@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ContactManager
+namespace ExercicesPOO
 {
    class ValidateurMail : Validateur
    {
@@ -33,10 +33,11 @@ namespace ContactManager
          Program.DEBUG(splitage[1]);
          if (splitage.Length != 2)
          {
-            if ((splitage[0].Length == 0) || (splitage[1].Length == 0))
-            {
-               return false;
-            }
+            return false;
+         }
+         if ((splitage[0].Length == 0) || (splitage[1].Length == 0))
+         {
+            return false;
          }
 
          return true;

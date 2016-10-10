@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace ContactManager
+namespace ExercicesPOO
 {
    class Program
    {

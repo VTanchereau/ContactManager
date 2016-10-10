@@ -4,18 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ContactManager
+namespace ExercicesPOO
 {
    abstract class Validateur
    {
       public abstract bool Validate(String str);
 
       public abstract void ErrorMessage(Afficheur afficheur);
-
-      public bool IsEmpty(String str)
-      {
-         return (str == "");
-      }
 
       public void EmptyErrorMessage(Afficheur affichage)
       {

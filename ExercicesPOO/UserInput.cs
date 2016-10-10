@@ -1,19 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ContactManager
+#pragma warning disable 168
+
+namespace ExercicesPOO
 {
    class UserInput
    {
       private Afficheur afficheur;
+      private Menu menu;
 
-      public UserInput(Afficheur afficheur)
+      public UserInput(Afficheur afficheur, Menu menu)
       {
          this.afficheur = afficheur;
+         this.menu = menu;
       }
 
       public String getInput(String message, Validateur validateur)
@@ -27,23 +32,24 @@ namespace ContactManager
          while (true)
          {
             input = Console.ReadLine();
-            if (validateur.IsEmpty(input))
+            if (string.IsNullOrEmpty(input))
             {
                validateur.EmptyErrorMessage(this.afficheur);
             }
             else
             {
-               if (validateur.Validate(input))
+               try
                {
-                  return input;
+                  validateur.Validate(input);
+                  break;
                }
-               else
+               catch(ValidateurException e)
                {
-                  validateur.ErrorMessage(this.afficheur);
+                  this.afficheur.AfficherErreur(e.Message);
                }
             }
-            
          }
+         return input;
       }
    }
 }

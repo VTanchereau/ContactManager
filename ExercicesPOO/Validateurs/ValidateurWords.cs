@@ -5,14 +5,15 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ContactManager
+namespace ExercicesPOO
 {
-   class ValidateurInt : Validateur
+   class ValidateurWords : Validateur
    {
+
       public override bool Validate(String str)
       {
          String pattern;
-         pattern = @"[0-9]+";
+         pattern = @"[A-Z]?[a-z]+";
          Regex rgx = new Regex(pattern);
          Match ma = rgx.Match(str);
          if (ma.Value.Length == str.Length)
@@ -24,7 +25,7 @@ namespace ContactManager
 
       public override void ErrorMessage(Afficheur afficheur)
       {
-         afficheur.AfficherErreur("Veuillez renseigner un nombre entier.");
+         afficheur.AfficherErreur("Veuillez renseigner un mot sans caractères spéciaux ni espaces.");
       }
    }
 }

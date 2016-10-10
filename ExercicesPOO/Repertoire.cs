@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ContactManager
+namespace ExercicesPOO
 {
    class Repertoire
    {

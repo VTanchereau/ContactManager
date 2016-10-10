@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ContactManager
+namespace ExercicesPOO
 {
    class ValidateurPath : Validateur
    {
@@ -16,7 +16,8 @@ namespace ContactManager
          {
             fi = new System.IO.FileInfo(str);
          }
-         catch (Exception) {
+         catch (Exception)
+         {
             Console.WriteLine("Désolé, j'ai planté");
          }
          //catch (System.IO.PathTooLongException) { }
