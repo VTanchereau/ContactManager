@@ -33,45 +33,12 @@ namespace ExercicesPOO
 
       private void Launch()
       {
-         while(this.continuer){
-            this.afficheur.AfficherMenu();
-            int choix;
-            choix = int.Parse(userInput.getInput("", new Validateurs.ValidateurInt()));
-            this.TraiterChoix(choix);
-         }
-      }
-
-      private void TraiterChoix(int choix)
-      {
-         switch (choix)
+         while (this.continuer)
          {
-            case 0:
-               this.continuer = false;
-               break;
-            case 1:
-               this.ListerContacts();
-               break;
-            case 2:
-               this.AjouterContact();
-               break;
-            case 3:
-               this.Rechercher();
-               break;
-            case 4:
-               this.Charger();
-               break;
-            case 5:
-               this.Sauvegarder();
-               break;
-            case 6:
-               this.Exporter();
-               break;
-            case 7:
-               this.RetirerContact();
-               break;
-            default:
-               this.afficheur.AfficherErreur("Le chiffre entré ne correspond à aucune action du menu.");
-               break;
+            this.afficheur.AfficherMenu();
+            String choix;
+            choix = userInput.getInput("", new Validateurs.ValidateurWords());
+            this.TraiterChoix(choix);
          }
       }
 
@@ -272,6 +239,69 @@ namespace ExercicesPOO
          else
          {
             return false;
+         }
+      }
+
+      private void TraiterChoix(String choix)
+      {
+         switch (choix.ToUpper())
+         {
+            case "0":
+            case "Q":
+            case "QUITTER":
+            case "QUIT":
+               this.continuer = false;
+               break;
+            case "1":
+            case "L":
+            case "LIST":
+            case "LISTE":
+            case "LISTER":
+               this.ListerContacts();
+               break;
+            case "2":
+            case "A":
+            case "AJOUT":
+            case "AJOUTER":
+            case "ADD":
+               this.AjouterContact();
+               break;
+            case "3":
+            case "R":
+            case "RECHERCHER":
+            case "RECHERCHE":
+            case "SEARCH":
+               this.Rechercher();
+               break;
+            case "4":
+            case "C":
+            case "CHARGER":
+            case "LOAD":
+               this.Charger();
+               break;
+            case "5":
+            case "S":
+            case "SAVE":
+            case "SAUVER":
+            case "SAUVEGARDER":
+               this.Sauvegarder();
+               break;
+            case "6":
+            case "E":
+            case "EXPORT":
+            case "EXPORTER":
+               this.Exporter();
+               break;
+            case "7":
+            case "SUPPR":
+            case "SUPPRIMER":
+            case "DELETE":
+            case "D":
+               this.RetirerContact();
+               break;
+            default:
+               this.afficheur.AfficherErreur("Veuillez choisir une action faisant partie du menu s'il vous plait.");
+               break;
          }
       }
 
