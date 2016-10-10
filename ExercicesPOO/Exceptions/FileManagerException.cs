@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace ExercicesPOO.Exceptions
 {
-   class ValidateurException : Exception
+   class FileManagerException : Exception
    {
-      public ValidateurException(String message)
+      public FileManagerException(String message)
          : base (message)
       {
       }
 
-      public ValidateurException(String message, Exception innerException)
+      public FileManagerException(String message, Exception innerException)
          : base (message, innerException)
       {
       }

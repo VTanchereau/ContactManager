@@ -14,18 +14,9 @@ namespace ExercicesPOO
       protected String prenom;
       protected String telephone;
       protected String mail;
-      protected bool moreInfos;
-
-      public Contact(String nom, String prenom)
-      {
-         this.nom = nom;
-         this.prenom = prenom;
-         this.moreInfos = false;
-      }
 
       public Contact(String nom, String prenom, String telephone, String mail)
       {
-         this.moreInfos = true;
          this.nom = nom;
          this.prenom = prenom;
          this.telephone = telephone;
@@ -97,30 +88,39 @@ namespace ExercicesPOO
          {
             match = (rgx.IsMatch(this.nom.ToUpper()));
          }
-         if (this.moreInfos)
+         if (nomChamp == "MAIL")
          {
-            if (nomChamp == "MAIL")
-            {
-               match = (rgx.IsMatch(this.mail.ToUpper()));
-            }
-            if (nomChamp == "TELEPHONE")
-            {
-               match = (rgx.IsMatch(this.telephone.ToUpper()));
-            }
+            match = (rgx.IsMatch(this.mail.ToUpper()));
+         }
+         if (nomChamp == "TELEPHONE")
+         {
+            match = (rgx.IsMatch(this.telephone.ToUpper()));
          }
 
          return match;
       }
-      public String Extract()
+
+      public String ExtractTXT()
+      {
+         String ligne;
+         ligne = this.prenom;
+         ligne = ligne.PadRight(50, ' ');
+         ligne += this.nom;
+         ligne = ligne.PadRight(100, ' ');
+         ligne += this.telephone;
+         ligne = ligne.PadRight(115, ' ');
+         ligne += this.mail;
+         ligne = ligne.PadRight(165, ' ');
+         return ligne;
+      }
+
+      public String ExtractCSV()
       {
          String ligne;
          ligne = this.prenom;
          ligne += ";" + this.nom;
-         if (moreInfos)
-         {
-            ligne += ";" + this.telephone;
-            ligne += ";" + this.mail;
-         }
+         ligne += ";" + this.telephone;
+         ligne += ";" + this.mail;
          return ligne;
       }
 

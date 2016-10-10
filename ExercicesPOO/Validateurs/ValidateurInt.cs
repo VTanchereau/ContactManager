@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ExercicesPOO
+namespace ExercicesPOO.Validateurs
 {
    class ValidateurInt : Validateur
    {
@@ -17,15 +17,15 @@ namespace ExercicesPOO
          }
          catch (FormatException e)
          {
-            throw new ValidateurException(Constantes.ERREUR_FORMAT_ENTIER, e);
+            throw new Exceptions.ValidateurException(Constantes.ERREUR_FORMAT_ENTIER, e);
          }
          catch (OverflowException e)
          {
-            throw new ValidateurException(Constantes.ERREUR_TAILLE_ENTIER, e);
+            throw new Exceptions.ValidateurException(Constantes.ERREUR_TAILLE_ENTIER, e);
          }
          catch (Exception e)
          {
-            throw new ValidateurException(Constantes.ERREUR_GENERIQUE, e);
+            throw new Exceptions.ValidateurException(Constantes.ERREUR_GENERIQUE, e);
          }
          return true;
       }

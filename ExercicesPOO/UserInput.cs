@@ -21,7 +21,7 @@ namespace ExercicesPOO
          this.menu = menu;
       }
 
-      public String getInput(String message, Validateur validateur)
+      public String getInput(String message, Validateurs.Validateur validateur)
       {
          String input;
          if (message != "")
@@ -43,7 +43,7 @@ namespace ExercicesPOO
                   validateur.Validate(input);
                   break;
                }
-               catch(ValidateurException e)
+               catch(Exceptions.ValidateurException e)
                {
                   this.afficheur.AfficherErreur(e.Message);
                }

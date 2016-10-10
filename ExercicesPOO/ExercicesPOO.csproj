@@ -47,8 +47,11 @@
     <Compile Include="Afficheur.cs" />
     <Compile Include="Constantes.cs" />
     <Compile Include="Contact.cs" />
+    <Compile Include="Exceptions\FileManagerException.cs" />
     <Compile Include="Exceptions\ValidateurException.cs" />
-    <Compile Include="FileManager.cs" />
+    <Compile Include="FileManagement\FileManager.cs" />
+    <Compile Include="FileManagement\FileManagerCSV.cs" />
+    <Compile Include="FileManagement\FileManagerTXT.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

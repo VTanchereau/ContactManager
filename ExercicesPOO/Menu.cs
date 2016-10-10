@@ -12,15 +12,14 @@ namespace ExercicesPOO
       private UserInput userInput;
       private Afficheur afficheur;
       private Repertoire repertoire;
-      private FileManager fileManager;
+      private FileManagement.FileManager fileManager;
 
       public Menu()
       {
          this.actions = new List<String>();
          this.afficheur = new Afficheur(this);
          this.userInput = new UserInput(afficheur, this);
-         this.fileManager = new FileManager();
-         this.repertoire = new Repertoire(this.fileManager.LoadFile());
+         this.repertoire = new Repertoire(new FileManagement.FileManagerCSV().LoadFile());
          this.AjouterActions();
          this.continuer = true;
 
@@ -37,7 +36,7 @@ namespace ExercicesPOO
          while(this.continuer){
             this.afficheur.AfficherMenu();
             int choix;
-            choix = int.Parse(userInput.getInput("", new ValidateurInt()));
+            choix = int.Parse(userInput.getInput("", new Validateurs.ValidateurInt()));
             this.TraiterChoix(choix);
          }
       }
@@ -94,7 +93,7 @@ namespace ExercicesPOO
                this.afficheur.AfficherDemande("");
                this.afficheur.AfficherDemande("0 - Abbandonner la suppression de contacts.");
 
-               choix = int.Parse(userInput.getInput("", new ValidateurInt()));
+               choix = int.Parse(userInput.getInput("", new Validateurs.ValidateurInt()));
                if (choix == 1)
                {
                   if(resultats.Count > 0)
@@ -138,25 +137,89 @@ namespace ExercicesPOO
       private void Exporter()
       {
          String path;
+         String choice;
+         String fileName;
 
-         path = this.userInput.getInput("Chemin du fichier.", new ValidateurPath());
-         this.fileManager.Exporter(this.repertoire, path);
-         this.afficheur.AfficherDemande("Le fichier a bien été exporté.");
+         choice = this.userInput.getInput("Format CSV ou TXT ?", new Validateurs.ValidateurWords());
+         path = this.userInput.getInput("Dans quel dossier enregistrer le fichier ?", new Validateurs.ValidateurPath());
+         fileName = this.userInput.getInput("Nom du fichier : ", new Validateurs.ValidateurWords());
+
+         if (!path.EndsWith("\\"))
+         {
+            path += "\\";
+         }
+
+         if (choice.ToUpper() == "CSV")
+         {
+            if (!fileName.EndsWith(".csv"))
+            {
+               fileName += ".csv";
+            }
+            this.fileManager = new FileManagement.FileManagerCSV();
+         }
+         else if (choice.ToUpper() == "TXT")
+         {
+            if (!fileName.EndsWith(".txt"))
+            {
+               fileName += ".txt";
+            }
+            this.fileManager = new FileManagement.FileManagerTXT();
+         }
+
+         path += fileName;
+         try
+         {
+            this.fileManager.Exporter(this.repertoire, path);
+            this.afficheur.AfficherDemande("Le fichier a bien été exporté.");
+         }
+         catch (Exceptions.FileManagerException e)
+         {
+            this.afficheur.AfficherErreur("Erreur dans l'exportation du repertoire.");
+            this.afficheur.AfficherErreur(e.Message);
+         }
       }
 
       private void Sauvegarder()
       {
-         this.fileManager.Save(this.repertoire);
-         this.afficheur.AfficherDemande("Le fichier a bien été sauvegardé.");
+         try
+         {
+            new FileManagement.FileManagerCSV().Save(this.repertoire);
+            this.afficheur.AfficherDemande("Le fichier a bien été sauvegardé.");
+         }
+         catch (Exceptions.FileManagerException e)
+         {
+            this.afficheur.AfficherErreur("Erreur dans la sauvegarde du repertoire.");
+            this.afficheur.AfficherErreur(e.Message);
+         }
       }
 
       private void Charger()
       {
          String path;
+         String choice;
 
-         path = this.userInput.getInput("Chemin du fichier.", new ValidateurPath());
-         this.fileManager.LoadFile(path);
-         this.afficheur.AfficherDemande("Le fichier a bien été chargé.");
+         choice = this.userInput.getInput("Format CSV ou TXT ?", new Validateurs.ValidateurWords());
+         path = this.userInput.getInput("Chemin du fichier :", new Validateurs.ValidateurPath());
+
+         if (choice.ToUpper() == "CSV")
+         {
+            this.fileManager = new FileManagement.FileManagerCSV();
+         }
+         else if (choice.ToUpper() == "TXT")
+         {
+            this.fileManager = new FileManagement.FileManagerTXT();
+         }
+
+         try
+         {
+            this.fileManager.LoadFile(path);
+            this.afficheur.AfficherDemande("Le fichier a bien été chargé.");
+         }
+         catch (Exceptions.FileManagerException e)
+         {
+            this.afficheur.AfficherErreur("Erreur dans le chargement du fichier.");
+            this.afficheur.AfficherErreur(e.Message);
+         }
       }
 
       private void ListerContacts()
@@ -171,12 +234,12 @@ namespace ExercicesPOO
          List<Contact> result;
 
          this.afficheur.AfficherRechercherContact();
-         precise = this.userInput.getInput("", new ValidateurBool()).ToUpper() == "OUI";
-         motCle = this.userInput.getInput("Entrez un mot clé :",new  ValidateurWords());
+         precise = this.userInput.getInput("", new Validateurs.ValidateurBool()).ToUpper() == "OUI";
+         motCle = this.userInput.getInput("Entrez un mot clé :",new Validateurs.ValidateurWords());
          if (precise)
          {
             this.afficheur.AfficherDemande("Entrez un champ :");
-            String champ = this.userInput.getInput("Entrez un champ :", new ValidateurChamp());
+            String champ = this.userInput.getInput("Entrez un champ :", new Validateurs.ValidateurChamp());
             result = this.repertoire.Rechercher(motCle, champ);
          }
          else
@@ -192,22 +255,13 @@ namespace ExercicesPOO
       {
          String prenom;
          String nom;
-         bool moreInfos;
 
          this.afficheur.AfficherAjoutContact();
-         prenom = this.userInput.getInput("Entrez le prénom :", new ValidateurWords());
-         nom = this.userInput.getInput("Entrez le nom :", new ValidateurWords());
-         moreInfos = this.userInput.getInput("Voulez vous renseigner le numéro de téléphone et le mail ?", new ValidateurBool()).ToUpper() == "OUI";
-         if (moreInfos)
-         {
-            String telephone = this.userInput.getInput("Entrez le téléphone :", new ValidateurPhoneNumber());
-            String mail = this.userInput.getInput("Entrez le mail :", new ValidateurMail());
-            this.repertoire.Add(new Contact(nom, prenom, telephone, mail));
-         }
-         else
-         {
-            this.repertoire.Add(new Contact(nom, prenom));
-         }
+         prenom = this.userInput.getInput("Entrez le prénom :", new Validateurs.ValidateurWords());
+         nom = this.userInput.getInput("Entrez le nom :", new Validateurs.ValidateurWords());
+         String telephone = this.userInput.getInput("Entrez le téléphone :", new Validateurs.ValidateurPhoneNumber());
+         String mail = this.userInput.getInput("Entrez le mail :", new Validateurs.ValidateurMail());
+         this.repertoire.Add(new Contact(nom, prenom, telephone, mail));
       }
 
       public static bool IsAction(int act)
