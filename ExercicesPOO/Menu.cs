@@ -20,6 +20,7 @@ namespace ExercicesPOO
          this.afficheur = new Afficheur(this);
          this.userInput = new UserInput(afficheur, this);
          this.repertoire = new Repertoire(new FileManagement.FileManagerCSV().LoadFile());
+         this.TrierContacts();
          this.AjouterActions();
          this.continuer = true;
 
@@ -229,17 +230,12 @@ namespace ExercicesPOO
          String telephone = this.userInput.getInput("Entrez le téléphone :", new Validateurs.ValidateurPhoneNumber());
          String mail = this.userInput.getInput("Entrez le mail :", new Validateurs.ValidateurMail());
          this.repertoire.Add(new Contact(nom, prenom, telephone, mail));
+         this.TrierContacts();*
       }
 
-      public static bool IsAction(int act)
+      private void TrierContacts()
       {
-         if ( (act >= 0) || (act < 8)){
-            return true;
-         }
-         else
-         {
-            return false;
-         }
+         this.repertoire.Contenu.Sort();
       }
 
       private void TraiterChoix(String choix)

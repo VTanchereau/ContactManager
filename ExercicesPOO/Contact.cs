@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ExercicesPOO
 {
-   class Contact
+   class Contact : IComparable
    {
       protected String nom;
       protected String prenom;
@@ -131,6 +131,21 @@ namespace ExercicesPOO
          ligne += "\n\tTéléphone : " + this.telephone;
          ligne += "\n\tMail : " + this.mail;
          return ligne;
+      }
+
+      public int CompareTo(object obj)
+      {
+         Contact secondContact = obj as Contact;
+         int compareNom = String.Compare(this.nom, secondContact.Nom);
+         if (compareNom != 0)
+         {
+            return compareNom;
+         }
+         else
+         {
+            int comparePrenom = String.Compare(this.prenom, secondContact.Prenom);
+            return 0;
+         }
       }
    }
 }

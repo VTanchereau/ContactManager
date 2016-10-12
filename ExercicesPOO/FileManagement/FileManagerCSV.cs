@@ -112,7 +112,7 @@ namespace ExercicesPOO.FileManagement
                champs = line.Split(';');
                if (champs.Length == 4)
                {
-                  provisoire.Add(new Contact(champs[0], champs[1], champs[2], champs[3]));
+                  provisoire.Add(new Contact(champs[1], champs[0], champs[2], champs[3]));
                }
                else
                {
